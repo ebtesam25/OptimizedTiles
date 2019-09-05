@@ -1,0 +1,1 @@
+masterRoll=100;nOrders=3;orderLength=[10,10,10];orderQuantity=[110,5,5];maxRollQuantity=sum(orderQuantity);maxOrderQuantity=max(orderQuantity);
