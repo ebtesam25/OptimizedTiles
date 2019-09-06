@@ -1,0 +1,10 @@
+floorLength = 1200;
+budget = 20000;
+nColors = 3;
+minCutLength = 10;
+minQuantity = 5;
+masterRoll = 100;
+
+COLORS = {RED, GREEN, BLUE};
+
+cost = [12, 11, 10];
