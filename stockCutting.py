@@ -1,14 +1,31 @@
 import pymzn
 import re
 
-print("Select your preference: \n")
+print("Select your optimization method: \n")
 print(" Press 1 for optimization based on budget \n")
 print(" Press 2 for optimization based on preference")
 
-preference = int(input("Preference:"))
+preference = int(input("Method:"))
 
 if preference == 1:
-    soln = pymzn.minizinc('minCost.mzn', 'minCost_Data.dzn', solver=pymzn.cbc, output_mode='item')
+    fl=input("Floor Length:")
+    b=input("Budget:")
+    file = open("minCost_Dataa.dzn", "w")
+    file.write("floorLength = ")
+    file.write(fl)
+    file.write(";")
+    file.write("budget = ")
+    file.write(b)
+    file.write(";")
+    file.write("nColors = 3;")
+    file.write("minCutLength = 10;")
+    file.write(" minQuantity = 5;")
+    file.write("masterRoll = 100;")
+    file.write("COLORS = {RED, GREEN, BLUE};")
+    file.write("cost = [12, 11, 10];")
+    file.close()
+
+    soln = pymzn.minizinc('minCost.mzn', 'minCost_Dataa.dzn', solver=pymzn.cbc, output_mode='item')
     print(soln[0])
 
     lengths = soln[0].split("=")
@@ -27,12 +44,40 @@ if preference == 1:
     file.write("];")
     file.write("maxRollQuantity=sum(orderQuantity);maxOrderQuantity=max(orderQuantity);")
     file.close()
-    fsol = pymzn.minizinc('StockCuttingOptimized.mzn', 'stockdataBudget.dzn', solver=pymzn.cbc, output_mode='item')
+    fsol = pymzn.minizinc('StockCutting.mzn', 'stockdataBudget.dzn', solver=pymzn.cbc, output_mode='item')
     print(fsol[0])
 
 
 elif preference == 2:
-    soln = pymzn.minizinc('maxLikeness.mzn', 'maxLikeness_Data.dzn', solver=pymzn.gecode, output_mode='item')
+    fl = input("Floor Length:")
+    b = input("Budget:")
+    print("Rate your preference using a number between 1-3 (3 representing the highest and 1 representing the lowest):")
+    p_red=input("Red:")
+    p_green=input("Green:")
+    p_blue=input("Blue:")
+    file = open("maxLikeness_Dataa.dzn", "w")
+    file.write("floorLength = ")
+    file.write(fl)
+    file.write(";")
+    file.write("budget = ")
+    file.write(b)
+    file.write(";")
+    file.write("nColors = 3;")
+    file.write("minCutLength = 10;")
+    file.write(" minQuantity = 5;")
+    file.write("masterRoll = 100;")
+    file.write("COLORS = {RED, GREEN, BLUE};")
+    file.write("cost = [12, 11, 10];")
+    file.write("preference = [")
+    file.write(p_red)
+    file.write(",")
+    file.write(p_green)
+    file.write(",")
+    file.write(p_blue)
+    file.write(",")
+    file.write("];")
+    file.close()
+    soln = pymzn.minizinc('maxLikeness.mzn', 'maxLikeness_Dataa.dzn', solver=pymzn.gecode, output_mode='item')
     print(soln[0])
 
     lengths=soln[0].split("=")
@@ -51,8 +96,9 @@ elif preference == 2:
     file.write("];")
     file.write("maxRollQuantity=sum(orderQuantity);maxOrderQuantity=max(orderQuantity);")
     file.close()
-    fsol=pymzn.minizinc('StockCuttingOptimized.mzn', 'stockdataPreference.dzn', solver=pymzn.cbc, output_mode='item')
+    fsol=pymzn.minizinc('StockCutting.mzn', 'stockdataPreference.dzn', solver=pymzn.cbc, output_mode='item')
     print(fsol[0])
+
 
 
 
